@@ -14,7 +14,9 @@ service = discovery.build(
 calendar_id = "primary"
 
 def get_week_events():
-    """Returns the next 7 days' events"""
+    """
+    Returns the next 7 days' events.
+    """
     start_time = datetime.now(tz=timezone.utc)
     end_time = start_time + timedelta(days=7)
 
@@ -26,21 +28,33 @@ def get_event(event_id: str):
     return service.events().get(calendarId=calendar_id, eventId=event_id).execute()
 
 def add_event(**kwargs):
-    event = {
-        "summary": kwargs.get("name"),
-        "description": kwargs.get("description", None),
-        "start": {
-            "dateTime": kwargs.get("start_time", datetime.now(timezone.utc).isoformat())
-        },
-        "end": {
-            "dateTime": kwargs.get("end_time", None)
-        }
-    }
+    event = transform_event_keys(kwargs)
 
     service.events().insert(calendarId=calendar_id, body=event).execute()
 
+def update_event(event_id: str, **kwargs):
+    event = transform_event_keys(kwargs)
+
+    service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+
 def delete_event(event_id: str):
     service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
+
+def transform_event_keys(items: dict):
+    """
+    Transforms an event from our internal format to the google format.
+    """
+    return {
+        "summary": items.get("name"),
+        "description": items.get("description", None),
+        "start": {
+            "dateTime": items.get("start_time", datetime.now(timezone.utc).isoformat())
+        },
+        "end": {
+            "dateTime": items.get("end_time", None)
+        }
+    }
+
 
 # Example event body
 # event = {

@@ -1,33 +1,33 @@
 from pyramid.view import view_config
 from pyramid.request import Request
-from pyramid.response import Response
 from gaf_api.services import calendar
+from gaf_api.resources import Calendar
 
-@view_config(route_name="v1:calendar/events", request_method="GET")
+@view_config(route_name="v1:calendar/events", request_method="GET", context=Calendar)
 def get_events(request: Request):
     return {"events": calendar.get_week_events()}
 
-@view_config(route_name="v1:calendar/event/new", request_method="POST")
+@view_config(route_name="v1:calendar/event/new", request_method="POST", context=Calendar, permission="edit")
 def new_event(request: Request):
     event = request.json_body
     calendar.add_event(**event)
 
     return {'status': "OK"}
 
-@view_config(route_name="v1:calendar/event", request_method="GET")
+@view_config(route_name="v1:calendar/event", request_method="GET", context=Calendar)
 def get_event(request: Request):
     event_id = request.matchdict["event"]
     return calendar.get_event(event_id)
 
-@view_config(route_name="v1:calendar/event", request_method="PUT")
+@view_config(route_name="v1:calendar/event", request_method="PUT", context=Calendar, permission="edit")
 def update_event(request: Request):
     event_id = request.matchdict["event"]
 
-    # idk yet man
+    calendar.update_event(event_id, **request.json_body)
 
-    return Response({'status': "Not Yet Implemented"}, status=202)
+    return {'status': "Updated event."}
 
-@view_config(route_name="v1:calendar/event", request_method="DELETE")
+@view_config(route_name="v1:calendar/event", request_method="DELETE", context=Calendar, permission="edit")
 def delete_event(request: Request):
     event_id = request.matchdict["event"]
 
