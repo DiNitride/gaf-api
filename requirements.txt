@@ -1,0 +1,27 @@
+-e git+git@github.com:hedgehog1029/api.git@6c7e99c7d7cfd5b5448c4497ae529c52cd9a590d#egg=gaf_api
+google-api-python-client==1.6.4
+httplib2==0.10.3
+hupper==1.0
+Mako==1.0.7
+MarkupSafe==1.0
+oauth2client==4.1.2
+PasteDeploy==1.5.2
+plaster==1.0
+plaster-pastedeploy==0.4.1
+pyasn1==0.3.7
+pyasn1-modules==0.1.5
+Pygments==2.2.0
+pyramid==1.9.1
+pyramid-debugtoolbar==4.3
+pyramid-mako==1.0.2
+repoze.lru==0.7
+rsa==3.4.2
+six==1.11.0
+translationstring==1.3
+uritemplate==3.0.0
+urllib3==1.22
+venusian==1.1.0
+waitress==1.1.0
+WebOb==1.7.3
+zope.deprecation==4.3.0
+zope.interface==4.4.3

@@ -8,7 +8,8 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(utils.load_config("goog
                                                          scopes=['https://www.googleapis.com/auth/calendar'])
 service = discovery.build(
     "calendar", "v3",
-    http=creds.authorize(Http())
+    http=creds.authorize(Http()),
+    cache_discovery=False
 )
 calendar_id = "primary"
 
@@ -22,14 +23,14 @@ def get_week_events():
     return res.get("items")
 
 def get_event(event_id: str):
-    return service.event().get(calendarId=calendar_id, eventId=event_id).execute()
+    return service.events().get(calendarId=calendar_id, eventId=event_id).execute()
 
 def add_event(**kwargs):
     event = {
         "summary": kwargs.get("name"),
         "description": kwargs.get("description", None),
         "start": {
-            "dateTime": kwargs.get("start_time", datetime.utcnow().isoformat())
+            "dateTime": kwargs.get("start_time", datetime.now(timezone.utc).isoformat())
         },
         "end": {
             "dateTime": kwargs.get("end_time", None)
