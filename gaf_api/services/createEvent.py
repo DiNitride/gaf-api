@@ -1,8 +1,6 @@
-import pprint
-
 from oauth2client.service_account import ServiceAccountCredentials
 from httplib2 import Http
-from apiclient.discovery import build
+from apiclient import discovery
 
 # Scope for accessing Google Calendar stuff, should be the only one we need
 scopes = ['https://www.googleapis.com/auth/calendar']
@@ -17,7 +15,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(
 http = credentials.authorize(Http())
 
 # 'Service' is the magic object that you can use to interact with the API
-service = build(
+service = discovery.build(
     "calendar",
     "v3",
     http=http
