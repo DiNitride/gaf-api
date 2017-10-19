@@ -40,7 +40,7 @@ def get_days_events():
 
         events.append(event)
 
-    return events
+    return {"events": events}
 
 # Test event ID for Dinny's calendar 1p75odn4lh62etgf9sklk7rdr0
 def get_event(event_id: str):
