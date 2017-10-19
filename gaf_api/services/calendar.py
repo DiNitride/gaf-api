@@ -11,7 +11,9 @@ service = discovery.build(
     http=creds.authorize(Http()),
     cache_discovery=False
 )
+
 calendar_id = "primary"
+
 
 def get_week_events():
     """
@@ -24,21 +26,26 @@ def get_week_events():
         .execute()
     return res.get("items")
 
+
 def get_event(event_id: str):
     return service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+
 
 def add_event(**kwargs):
     event = transform_event_keys(kwargs)
 
     service.events().insert(calendarId=calendar_id, body=event).execute()
 
+
 def update_event(event_id: str, **kwargs):
     event = transform_event_keys(kwargs)
 
     service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
 
+
 def delete_event(event_id: str):
     service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
+
 
 def transform_event_keys(items: dict):
     """
