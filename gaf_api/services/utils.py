@@ -2,6 +2,7 @@ from os import getenv, getcwd
 import pathlib
 import json
 
+
 def load_config(filename: str):
     base = getenv("CONFIG_BASE", getcwd() + "/config")
 
