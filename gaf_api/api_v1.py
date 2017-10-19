@@ -3,7 +3,6 @@ from pyramid.request import Request
 from gaf_api.services import calendar
 from gaf_api.resources import Root
 
-
 @view_config(route_name="v1:calendar/events", request_method="GET", context=Root)
 def get_events(request: Request):
     """
@@ -11,13 +10,11 @@ def get_events(request: Request):
     """
     return calendar.get_days_events()
 
-
-# @view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root, permission="edit")
-# def new_event(request: Request):
-#     event = request.json_body
-#     calendar.add_event(**event)
-#     return {'status': "OK"}
-
+@view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root, permission="add")
+def new_event(request: Request):
+    event = request.json_body
+    calendar.add_event(**event)
+    return {'status': "OK"}
 
 @view_config(route_name="v1:calendar/event", request_method="GET", context=Root)
 def get_event(request: Request):
