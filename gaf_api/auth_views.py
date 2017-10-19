@@ -7,6 +7,7 @@ import requests
 
 oauth = utils.load_config("oauth.json")
 
+
 @view_config(route_name="oauth:authenticate", request_method="GET")
 def oauth_start(request: Request):
     redirect_url = request.route_url("oauth:authorize")
@@ -14,6 +15,7 @@ def oauth_start(request: Request):
     url = urlparse.urljoin(oauth["auth_url"], query)
 
     return Response(status=307, headers={"Location": url})
+
 
 @view_config(route_name="oauth:authorize", request_method="GET")
 def oauth_authorize(request: Request):

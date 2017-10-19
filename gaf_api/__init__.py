@@ -7,8 +7,10 @@ import logging
 
 LOGGER = logging.getLogger("gaf_api")
 
+
 def get_root(request):
     return Root()
+
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application. """
