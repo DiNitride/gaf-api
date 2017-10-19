@@ -29,6 +29,14 @@ def get_event(request: Request):
     return calendar.get_event(event_id)
 
 
+@view_config(route_name="v1:live", request_method="GET", context=Root)
+def live_check(request: Request):
+    """
+    Checks if things are working fine
+    """
+    return {"API Live": True}
+
+
 # @view_config(route_name="v1:calendar/event", request_method="PUT", context=Root, permission="edit")
 # def update_event(request: Request):
 #     event_id = request.matchdict["event"]
