@@ -1,0 +1,3 @@
+[run]
+source = gaf_api
+omit = gaf_api/test*
