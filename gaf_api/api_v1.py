@@ -9,8 +9,7 @@ def get_events(request: Request):
     """
     Returns the days events
     """
-    # TODO: Change this to day not week events
-    return {"events": calendar.get_week_events()}
+    return calendar.get_days_events()
 
 
 # @view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root, permission="edit")
