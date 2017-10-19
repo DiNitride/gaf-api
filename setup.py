@@ -9,8 +9,9 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 requires = [
     'plaster_pastedeploy',
     'pyramid',
-    'pyramid_debugtoolbar',
     'waitress',
+    'google-api-python-client',
+    'python-jose'
 ]
 
 tests_require = [
@@ -39,6 +40,7 @@ setup(
     zip_safe=False,
     extras_require={
         'testing': tests_require,
+        'debug': ['pyramid_debugtoolbar']
     },
     install_requires=requires,
     entry_points={
