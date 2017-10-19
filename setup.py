@@ -11,7 +11,8 @@ requires = [
     'pyramid',
     'waitress',
     'google-api-python-client',
-    'python-jose'
+    'python-jose',
+    'requests'
 ]
 
 tests_require = [

@@ -1,6 +1,6 @@
 from pyramid.config import Configurator
 from pyramid.renderers import json_renderer_factory
-from gaf_api.services.oauth import BearerAuthenticationPolicy, JwtHelper
+from gaf_api.auth.oauth import BearerAuthenticationPolicy, JwtHelper
 from gaf_api.resources import Root
 from os import getenv
 import logging
@@ -26,6 +26,7 @@ def main(global_config, **settings):
     config.scan(".api_v1")
 
     # OAuth
-    # config.add_route("oauth:authenticate", '/oauth2/authenticate')
+    # config.add_route('oauth:authenticate', '/oauth2/authenticate')
+    # config.add_route('oauth:authorize', '/oauth2/authorize')
 
     return config.make_wsgi_app()
