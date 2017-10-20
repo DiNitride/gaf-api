@@ -6,7 +6,7 @@ from gaf_api.resources import Root
 @view_config(route_name="v1:calendar/events", request_method="GET", context=Root)
 def get_events(request: Request):
     """
-    Returns the days events
+    Returns the day's events
     """
     return calendar.get_days_events()
 
