@@ -61,6 +61,9 @@ def new_event(request: Request):
 
 @view_config(route_name="v1:calendar/event", request_method="DELETE", context=Root, permission="edit")
 def delete_event(request: Request):
+    """
+    Deletes an event with requested ID
+    """
     event_id = request.matchdict["event"]
 
     calendar.delete_event(event_id)
