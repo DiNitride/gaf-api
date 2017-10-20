@@ -28,34 +28,18 @@ def get_days_events():
         .execute()
 
     events = []
-
     for e in res.get("items"):
-        event = {
-            "name": e.get("summary"),
-            "id": e.get("id"),
-            "channel": e.get("location"),
-            "description": e.get("description"),
-            "startTime": e.get("start").get("dateTime"),
-            "endTime": e.get("end").get("dateTime")
-        }
-
-        events.append(event)
+        events.append(google_to_api(e))
 
     return {"events": events}
 
 
 def get_event(event_id: str):
+    """
+    Get's an event's data from a specific ID
+    """
     res = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
-
-    event = {
-        "name": res.get("summary"),
-        "id": res.get("id"),
-        "channel": res.get("location"),
-        "description": res.get("description"),
-        "startTime": res.get("start").get("dateTime"),
-        "endTime": res.get("end").get("dateTime")
-    }
-
+    event = google_to_api(res)
     return event
 
 
@@ -77,6 +61,9 @@ def create_event(event: dict):
 
 
 def delete_event(event_id: str):
+    """
+    Delete's an event based on a specific ID
+    """
     service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
 
 
