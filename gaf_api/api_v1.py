@@ -1,20 +1,34 @@
+from datetime import datetime, timedelta, timezone
+
 from pyramid.view import view_config
 from pyramid.request import Request
+
 from gaf_api.services import calendar
 from gaf_api.resources import Root
+
 
 @view_config(route_name="v1:calendar/events", request_method="GET", context=Root)
 def get_events(request: Request):
     """
     Returns the day's events
     """
+    calendar.create_event(event = {
+        "name": "Test event",
+        "id": "",
+        "channel": "Channel 1",
+        "description": "Bootleg JSON",
+        "startTime": datetime.now(timezone.utc).isoformat(),
+        "endTime": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+    })
     return calendar.get_days_events()
+
 
 @view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root, permission="add")
 def new_event(request: Request):
     event = request.json_body
-    calendar.add_event(**event)
+    calendar.create_event(**event)
     return {'status': "OK"}
+
 
 @view_config(route_name="v1:calendar/event", request_method="GET", context=Root)
 def get_event(request: Request):

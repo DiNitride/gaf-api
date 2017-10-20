@@ -1,8 +1,10 @@
-from oauth2client.service_account import ServiceAccountCredentials
-from httplib2 import Http
-from apiclient import discovery
-from gaf_api.services import utils
 from datetime import datetime, timedelta, timezone
+from httplib2 import Http
+
+from oauth2client.service_account import ServiceAccountCredentials
+from apiclient import discovery
+
+from gaf_api.services import utils
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(utils.load_config("google_keys.json"),
                                                          scopes=['https://www.googleapis.com/auth/calendar'])
@@ -13,6 +15,7 @@ service = discovery.build(
 )
 
 calendar_id = utils.load_config("calendar_id.json").get("id")
+
 
 def get_days_events():
     """
@@ -40,7 +43,7 @@ def get_days_events():
 
     return {"events": events}
 
-# Test event ID for Dinny's calendar 1p75odn4lh62etgf9sklk7rdr0
+
 def get_event(event_id: str):
     res = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
 
@@ -55,30 +58,53 @@ def get_event(event_id: str):
 
     return event
 
-def add_event(**kwargs):
-    event = transform_event_keys(kwargs)
+
+def create_event(event: dict):
+    """
+    Takes a dictionary in internal event format and creates it on the calendar.
+    """
+    event = api_to_google(event)
+
+    del event["id"]  # Deletes any ID passed so Google generates us a unique ID
 
     service.events().insert(calendarId=calendar_id, body=event).execute()
 
-def update_event(event_id: str, **kwargs):
-    event = transform_event_keys(kwargs)
 
-    service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+# def update_event(event_id: str, **kwargs):
+#     event = transform_event_keys(kwargs)
+#
+#     service.events().update(calendarId=calendar_id, eventId=event_id, body=event).execute()
+
 
 def delete_event(event_id: str):
     service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
 
-def transform_event_keys(items: dict):
+
+def google_to_api(g: dict):
     """
-    Transforms an event from our internal format to the google format.
+    Converts from the Google Resource format to our internal JSON Format
     """
-    return {
-        "summary": items.get("name"),
-        "description": items.get("description", None),
-        "start": {
-            "dateTime": items.get("startTime", datetime.now(timezone.utc).isoformat())
-        },
-        "end": {
-            "dateTime": items.get("endTime", None)
-        }
+    event = {
+        "name": g.get("summary"),
+        "id": g.get("id"),
+        "channel": g.get("location"),
+        "metadata": g.get("description"),
+        "startTime": g.get("start").get("dateTime"),
+        "endTime": g.get("end").get("dateTime")
     }
+    return event
+
+
+def api_to_google(items: dict):
+    """
+    Transforms our interal JSON Object to the Google Resource
+    """
+    g = {
+        "summary": items.get("name"),
+        "id": items.get("id"),
+        "location": items.get("channel"),
+        "description": items.get("metadata"),
+        "start": {"dateTime": items.get("startTime")},
+        "end": {"dateTime": items.get("endTime")}
+    }
+    return g
