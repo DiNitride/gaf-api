@@ -1,5 +1,6 @@
 from pyramid.config import Configurator
 from pyramid.renderers import json_renderer_factory
+from pyramid.authorization import ACLAuthorizationPolicy
 from gaf_api.auth.oauth import BearerAuthenticationPolicy, JwtHelper
 from gaf_api.resources import Root
 from os import getenv

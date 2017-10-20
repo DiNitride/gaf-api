@@ -26,6 +26,8 @@ def oauth_authorize(request: Request):
         **oauth['token_params']
     )
 
+    print(urlparse.urlencode(data))
+
     r = requests.post(oauth["token_url"], data=data)
     resp = r.json()
 
