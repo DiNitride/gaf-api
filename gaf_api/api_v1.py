@@ -52,7 +52,7 @@ def get_event(request: Request):
     return calendar.get_event(event_id)
 
 
-@view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root, permission="add")
+@view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root)
 def new_event(request: Request):
     """
     Creates a new event
@@ -71,7 +71,7 @@ def new_event(request: Request):
     return {"status": "Unauthorised."}
 
 
-@view_config(route_name="v1:calendar/event", request_method="DELETE", context=Root, permission="edit")
+@view_config(route_name="v1:calendar/event/delete", request_method="DELETE", context=Root)
 def delete_event(request: Request):
     """
     Deletes an event with requested ID
