@@ -46,8 +46,21 @@ def new_event(request: Request):
     Creates a new event
     """
     event = request.json_body
+    token = request.matchdict.get("jwt")
     calendar.create_event(**event)
-    return {'status': "OK"}
+    return {'status': "Created event."}
+
+
+@view_config(route_name="v1:calendar/event", request_method="DELETE", context=Root, permission="edit")
+def delete_event(request: Request):
+    """
+    Deletes an event with requested ID
+    """
+    event_id = request.matchdict["event"]
+    token = request.matchdict.get("jwt")
+    calendar.delete_event(event_id)
+
+    return {'status': "Deleted event."}
 
 
 # @view_config(route_name="v1:calendar/event", request_method="PUT", context=Root, permission="edit")
@@ -57,15 +70,3 @@ def new_event(request: Request):
 #     calendar.update_event(event_id, **request.json_body)
 #
 #     return {'status': "Updated event."}
-
-
-@view_config(route_name="v1:calendar/event", request_method="DELETE", context=Root, permission="edit")
-def delete_event(request: Request):
-    """
-    Deletes an event with requested ID
-    """
-    event_id = request.matchdict["event"]
-
-    calendar.delete_event(event_id)
-
-    return {'status': "Deleted event."}

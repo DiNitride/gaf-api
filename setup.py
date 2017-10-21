@@ -10,7 +10,9 @@ requires = [
     'pyramid',
     'waitress',
     'google-api-python-client',
-    'requests'
+    'requests',
+    "PyJWT",
+    "pyramid-debugtoolbar"
 ]
 
 tests_require = [
