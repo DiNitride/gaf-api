@@ -88,12 +88,7 @@ def delete_event(request: Request):
 
     metadata = json.loads(event["description"])
 
-    # TODO: Clean this up
-    if metadata["owner_id"] == payload["id"]:
-        calendar.delete_event(event_id)
-        return {'status': "Deleted event."}
-
-    if bot_interface.is_user_manager(payload["id"]):
+    if metadata["owner_id"] == payload["id"] or bot_interface.is_user_manager(payload["id"]):
         calendar.delete_event(event_id)
         return {'status': "Deleted event."}
 
