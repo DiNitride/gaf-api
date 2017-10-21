@@ -10,8 +10,6 @@ class BotInterface:
         guild_id = 172425299559055381
         editor_role = "262334316611239937"
 
-        # Here we use the bot's token to get hold of the user's roles
-        # Bot's token isn't in yet - replace the string with a variable or whatever
         r = requests.get(f"https://discordapp.com/api/v7/guilds/{guild_id}/members/{user_id}",
                          headers={"Authorization": f"{self.token}"})
 
@@ -28,8 +26,6 @@ class BotInterface:
         guild_id = 172425299559055381
         manager_role = "172426922947641344"
 
-        # Here we use the bot's token to get hold of the user's roles
-        # Bot's token isn't in yet - replace the string with a variable or whatever
         r = requests.get(f"https://discordapp.com/api/v7/guilds/{guild_id}/members/{user_id}",
                          headers={"Authorization": f"{self.token}"})
 

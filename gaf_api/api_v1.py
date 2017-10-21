@@ -9,10 +9,14 @@ from gaf_api.services import calendar
 from gaf_api.resources import Root
 from gaf_api.auth.oauth import JwtHelper
 from gaf_api.auth.bot_interface import BotInterface
+from gaf_api.services.utils import load_config
 
-jwt_interface = JwtHelper(key="someKey")
 
-bot_interface = BotInterface(token="token goez ere")
+jwt_config = load_config("jwt_config.json")
+jwt_interface = JwtHelper(key=jwt_config["secret"])
+
+bot_config = load_config("bot_config.json")
+bot_interface = BotInterface(token=bot_config["token"])
 
 
 @view_config(route_name="v1:live", request_method="GET", context=Root)
