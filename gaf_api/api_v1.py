@@ -1,10 +1,18 @@
 from datetime import datetime, timedelta, timezone
+import json
 
 from pyramid.view import view_config
 from pyramid.request import Request
+from jwt.exceptions import InvalidTokenError, DecodeError
 
 from gaf_api.services import calendar
 from gaf_api.resources import Root
+from gaf_api.auth.oauth import JwtHelper
+from gaf_api.auth.bot_interface import BotInterface
+
+jwt_interface = JwtHelper(key="someKey")
+
+bot_interface = BotInterface(token="token goez ere")
 
 
 @view_config(route_name="v1:live", request_method="GET", context=Root)
@@ -46,9 +54,17 @@ def new_event(request: Request):
     Creates a new event
     """
     event = request.json_body
-    token = request.matchdict.get("jwt")
-    calendar.create_event(**event)
-    return {'status': "Created event."}
+    token = request.matchdict.get("token")
+    try:
+        payload = jwt_interface.decode(token)
+    except InvalidTokenError or DecodeError:
+        return {'status': "Error authenticating."}
+
+    if bot_interface.is_user_editor(payload["id"]):
+        calendar.create_event(**event)
+        return {'status': "Created event."}
+
+    return {"status": "Unauthorised."}
 
 
 @view_config(route_name="v1:calendar/event", request_method="DELETE", context=Root, permission="edit")
@@ -57,10 +73,27 @@ def delete_event(request: Request):
     Deletes an event with requested ID
     """
     event_id = request.matchdict["event"]
-    token = request.matchdict.get("jwt")
-    calendar.delete_event(event_id)
+    token = request.matchdict.get("token")
 
-    return {'status': "Deleted event."}
+    try:
+        payload = jwt_interface.decode(token)
+    except InvalidTokenError or DecodeError:
+        return {'status': "Error authenticating."}
+
+    event = get_event(event_id)
+
+    metadata = json.loads(event["description"])
+
+    # TODO: Clean this up
+    if metadata["owner_id"] == payload["id"]:
+        calendar.delete_event(event_id)
+        return {'status': "Deleted event."}
+
+    if bot_interface.is_user_manager(payload["id"]):
+        calendar.delete_event(event_id)
+        return {'status': "Deleted event."}
+
+    return {"status": "Unauthorised."}
 
 
 # @view_config(route_name="v1:calendar/event", request_method="PUT", context=Root, permission="edit")

@@ -45,6 +45,8 @@ def oauth_authorize(request: Request):
         return Response(resp, status=400)
 
     access_token = resp.get('token_type') + " " + resp.get('access_token')
+
+    # TODO: Save Token to DB, create JWT, pass to Fronstend
     print(access_token)
 
 
