@@ -20,7 +20,8 @@ class BotInterface:
                 if r["id"] == editor_role:
                     return True
                 else:
-                    return False
+                    continue
+            return False
 
     def is_user_manager(self, user_id):
         guild_id = 172425299559055381
@@ -38,4 +39,5 @@ class BotInterface:
                 if r == manager_role:
                     return True
                 else:
-                    return False
+                    continue
+            return False
