@@ -6,6 +6,8 @@ from gaf_api.resources import Root
 from os import getenv
 import logging
 
+import gaf_api.database as db
+
 LOGGER = logging.getLogger("gaf_api")
 
 
@@ -15,6 +17,9 @@ def get_root(request):
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application. """
+
+    db.main()
+
     config = Configurator(settings=settings)
     config.set_root_factory(get_root)
     config.add_renderer(None, json_renderer_factory)
