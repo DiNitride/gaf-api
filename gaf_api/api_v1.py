@@ -32,14 +32,6 @@ def get_events(request: Request):
     """
     Returns the day's events
     """
-    calendar.create_event(event = {
-        "name": "Test event",
-        "id": "",
-        "channel": "Channel 1",
-        "description": "Bootleg JSON",
-        "startTime": datetime.now(timezone.utc).isoformat(),
-        "endTime": (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
-    })
     return calendar.get_days_events()
 
 
@@ -58,8 +50,13 @@ def new_event(request: Request):
     Creates a new event
     """
     event = request.json_body
+    jwt_token = request.headers["authorization"]
+    print(jwt_token)
+    jwt_token = jwt_token[6:]
+    print(jwt_token)
     try:
-        payload = jwt_interface.decode(token)
+        payload = jwt_interface.decode(jwt_token)
+        print(payload)
     except InvalidTokenError or DecodeError:
         return {'status': "Error authenticating."}
 
@@ -75,21 +72,23 @@ def delete_event(request: Request):
     """
     Deletes an event with requested ID
     """
-    print(request)
-    print(request.matchdict)
+
     event_id = request.matchdict["event"]
-    token = request.matchdict["token"]
+    jwt_token = request.headers["Authorization"][6:]
+    print(jwt_token)
 
     try:
-        payload = jwt_interface.decode(token)
+        payload = jwt_interface.decode(jwt_token)
+        print(payload)
     except InvalidTokenError or DecodeError:
         return {'status': "Error authenticating."}
 
-    event = get_event(event_id)
+    # event = get_event(event_id)
 
-    metadata = json.loads(event["description"])
+    # metadata = json.loads(event["description"])
 
-    if metadata["owner_id"] == payload["id"] or bot_interface.is_user_manager(payload["id"]):
+    # if metadata["owner_id"] == payload["id"] or bot_interface.is_user_manager(payload["id"]):
+    if bot_interface.is_user_manager(payload["id"]):
         calendar.delete_event(event_id)
         return {'status': "Deleted event."}
 

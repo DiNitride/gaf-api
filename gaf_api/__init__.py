@@ -29,7 +29,7 @@ def main(global_config, **settings):
     # API v1
     config.add_route('v1:calendar/events', '/api/v1/calendar/events')
     config.add_route('v1:calendar/event', '/api/v1/calendar/event/{event}')
-    config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/{event}")
+    config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/delete/{event}")
     config.add_route('v1:calendar/event/new', '/api/v1/calendar/event/new/')
     config.add_route("v1:live", "api/v1/live")
     config.scan(".api_v1")
