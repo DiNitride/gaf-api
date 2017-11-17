@@ -7,6 +7,7 @@ from pyramid.response import Response
 
 from gaf_api.services import utils
 from gaf_api.auth.oauth import JwtHelper
+import gaf_api.database as db
 
 
 oauth = utils.load_config("oauth.json")
@@ -41,8 +42,6 @@ def oauth_authorize(request: Request):
         **oauth['token_params']
     )
 
-    print(urlparse.urlencode(data))
-
     r = requests.post(oauth["token_url"], data=data)
     resp = r.json()
 
@@ -50,15 +49,15 @@ def oauth_authorize(request: Request):
         return Response(resp, status=400)
 
     access_token = resp.get('token_type') + " " + resp.get('access_token')
-
-    # TODO: Save Token to DB, create JWT, pass to Frontend
-    print(access_token)
+    refresh_token = resp.get('refresh_token')
 
     r = requests.get("https://discordapp.com/api/v7/users/@me", headers={"Authorization": access_token})
     r = r.json()
 
     jwt_token = jwt_interface.encode(id=r["id"])
-    print(jwt_token)
+    db.add_user(r["id"], access_token, refresh_token)
+
+    # TODO: Return JWT token
     return {"Status": "Access token granted"}
 
 

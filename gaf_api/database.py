@@ -15,12 +15,6 @@ conn_string = f"" \
 conn = psycopg2.connect(conn_string)
 cursor = conn.cursor()
 
-cursor.execute("SELECT * FROM public.users")
-
-# Check shit is working, will remove in future
-records = cursor.fetchall()
-pprint.pprint(records)
-
 
 def get_user(user_id: int):
     cursor.execute("SELECT * FROM public.users WHERE id=(%s)", (user_id,))

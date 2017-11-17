@@ -58,7 +58,6 @@ def new_event(request: Request):
     Creates a new event
     """
     event = request.json_body
-    token = request.matchdict.get("token")
     try:
         payload = jwt_interface.decode(token)
     except InvalidTokenError or DecodeError:

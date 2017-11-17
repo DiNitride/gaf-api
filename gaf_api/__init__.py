@@ -18,11 +18,6 @@ def get_root(request):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application. """
 
-    db.get_user(123)
-    db.add_user(123, "test", "test")
-    db.get_user(123)
-    db.remove_user(123)
-
     config = Configurator(settings=settings)
     config.set_root_factory(get_root)
     config.add_renderer(None, json_renderer_factory)
@@ -34,8 +29,8 @@ def main(global_config, **settings):
     # API v1
     config.add_route('v1:calendar/events', '/api/v1/calendar/events')
     config.add_route('v1:calendar/event', '/api/v1/calendar/event/{event}')
-    config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/{event}/{token}")
-    config.add_route('v1:calendar/event/new', '/api/v1/calendar/event/new/{token}')
+    config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/{event}")
+    config.add_route('v1:calendar/event/new', '/api/v1/calendar/event/new/')
     config.add_route("v1:live", "api/v1/live")
     config.scan(".api_v1")
 
