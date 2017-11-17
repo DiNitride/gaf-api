@@ -76,8 +76,10 @@ def delete_event(request: Request):
     """
     Deletes an event with requested ID
     """
+    print(request)
+    print(request.matchdict)
     event_id = request.matchdict["event"]
-    token = request.matchdict.get("token")
+    token = request.matchdict["token"]
 
     try:
         payload = jwt_interface.decode(token)
