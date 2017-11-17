@@ -18,7 +18,10 @@ def get_root(request):
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application. """
 
-    db.main()
+    db.get_user(123)
+    db.add_user(123, "test", "test")
+    db.get_user(123)
+    db.remove_user(123)
 
     config = Configurator(settings=settings)
     config.set_root_factory(get_root)
