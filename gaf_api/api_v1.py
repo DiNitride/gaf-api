@@ -50,18 +50,17 @@ def new_event(request: Request):
     Creates a new event
     """
     event = request.json_body
-    jwt_token = request.headers["authorization"]
-    print(jwt_token)
-    jwt_token = jwt_token[6:]
-    print(jwt_token)
+    jwt_token = request.headers["authorization"][6:]
     try:
         payload = jwt_interface.decode(jwt_token)
-        print(payload)
     except InvalidTokenError or DecodeError:
         return {'status': "Error authenticating."}
 
     if bot_interface.is_user_editor(payload["id"]):
-        calendar.create_event(**event)
+        event["startTime"] = datetime.now(timezone.utc).isoformat()
+        event["endTime"] = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+        event["description"] = json.dumps({"owner": payload["id"]})
+        calendar.create_event(event)
         return {'status': "Created event."}
 
     return {"status": "Unauthorised."}

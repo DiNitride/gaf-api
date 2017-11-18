@@ -17,7 +17,7 @@ class BotInterface:
             member = r.json()
             roles = member.get("roles", [])
             for r in roles:
-                if r["id"] == editor_role:
+                if r == editor_role:
                     return True
                 else:
                     continue
@@ -29,13 +29,11 @@ class BotInterface:
 
         r = requests.get(f"https://discordapp.com/api/v7/guilds/{guild_id}/members/{user_id}",
                          headers={"Authorization": f"Bot {self.token}"})
-        print(r.status_code)
+
         if r.status_code == 200:
             member = r.json()
             roles = member.get("roles", [])
-            print(roles)
             for r in roles:
-                print(r)
                 if r == manager_role:
                     return True
                 else:
