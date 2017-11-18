@@ -40,7 +40,10 @@ def get_event(request: Request):
     """
     Get's an event from an event ID
     """
-    event_id = request.matchdict["event"]
+    if isinstance(request, Request):
+        event_id = request.matchdict["event"]
+    else:
+        event_id = request
     return calendar.get_event(event_id)
 
 
@@ -59,7 +62,7 @@ def new_event(request: Request):
     if bot_interface.is_user_editor(payload["id"]):
         event["startTime"] = datetime.now(timezone.utc).isoformat()
         event["endTime"] = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
-        event["description"] = json.dumps({"owner": payload["id"]})
+        event["metadata"] = json.dumps({"owner": payload["id"]})
         calendar.create_event(event)
         return {'status': "Created event."}
 
@@ -82,12 +85,11 @@ def delete_event(request: Request):
     except InvalidTokenError or DecodeError:
         return {'status': "Error authenticating."}
 
-    # event = get_event(event_id)
+    event = get_event(event_id)
 
-    # metadata = json.loads(event["description"])
+    metadata = json.loads(event["metadata"])
 
-    # if metadata["owner_id"] == payload["id"] or bot_interface.is_user_manager(payload["id"]):
-    if bot_interface.is_user_manager(payload["id"]):
+    if metadata["owner"] == payload["id"] or bot_interface.is_user_manager(payload["id"]):
         calendar.delete_event(event_id)
         return {'status': "Deleted event."}
 
