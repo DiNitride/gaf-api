@@ -57,7 +57,7 @@ def oauth_authorize(request: Request):
     jwt_token = jwt_interface.encode(id=r["id"])
     db.add_user(r["id"], access_token, refresh_token)
 
-    # TODO: Return JWT token
+    # TODO: Return JWT token to browser
     return {"Status": "Access token granted"}
 
 

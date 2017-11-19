@@ -31,7 +31,9 @@ def main(global_config, **settings):
     config.add_route('v1:calendar/event', '/api/v1/calendar/event/{event}')
     config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/delete/{event}")
     config.add_route('v1:calendar/event/new', '/api/v1/calendar/event/new/')
-    config.add_route("v1:live", "api/v1/live")
+    config.add_route("v1:live", "/api/v1/live")
+    config.add_route("v1:acronyms", "/api/v1/acronyms")
+    config.add_route("v1:acronyms/new", "/api/v1/acronyms/new")
     config.scan(".api_v1")
 
     # OAuth
