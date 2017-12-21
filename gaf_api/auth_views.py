@@ -57,8 +57,7 @@ def oauth_authorize(request: Request):
     jwt_token = jwt_interface.encode(id=r["id"])
     db.add_user(r["id"], access_token, refresh_token)
 
-    # TODO: Return JWT token to browser
-    return {"Status": "Access token granted"}
+    return Response(status=302, headers={"Location": f"http://www.neverendinggaf.com?token={jwt_token}"})
 
 
 @view_config(route_name="oauth:@me", request_method="GET")

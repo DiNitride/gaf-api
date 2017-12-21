@@ -7,8 +7,8 @@ from gaf_api.services import utils
 db_config = utils.load_config("db.json")
 
 conn_string = f"" \
-              f"host='localhost' " \
-              f"dbname='dev-NeverEndingGAF' " \
+              f"host='{db_config['host']}' " \
+              f"dbname='{db_config['db']}' " \
               f"user='{db_config['db_user']}' " \
               f"password='{db_config['db_pass']}'"
 
