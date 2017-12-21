@@ -12,7 +12,8 @@ requires = [
     'google-api-python-client',
     'requests',
     "PyJWT",
-    "pyramid-debugtoolbar"
+    "pyramid-debugtoolbar",
+    "psycopg2"
 ]
 
 tests_require = [

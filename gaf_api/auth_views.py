@@ -21,7 +21,7 @@ def oauth_start(request: Request):
     """
     Redirects to the Discord OAuth2 login screen
     """
-    redirect_url = request.route_url("oauth:authorize")
+    redirect_url = oauth["redirect_url"]
     query = urlparse.urlencode(query=utils.combine(redirect_uri=redirect_url, **oauth["params"]))
     url = urlparse.urljoin(oauth["auth_url"], "?" + query)
 
