@@ -4,7 +4,7 @@ from pyramid.renderers import json_renderer_factory
 from gaf_api.resources import Root
 import logging
 
-import gaf_api.services.db_interface as db
+from .services import db_interface as db
 
 LOGGER = logging.getLogger("gaf_api")
 

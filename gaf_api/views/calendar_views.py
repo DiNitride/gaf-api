@@ -10,6 +10,8 @@ from ..resources import Root
 from ..services import bot_interface
 
 
+# Getting Events
+
 @view_config(route_name="v1:calendar/events", request_method="GET", context=Root)
 def get_events(request: Request):
     """
@@ -30,26 +32,20 @@ def get_event(request: Request):
     return calendar.get_event(event_id)
 
 
+# Managing Events
+
 @view_config(route_name="v1:calendar/event/new", request_method="POST", context=Root)
 def new_event(request: Request):
     """
     Creates a new event
     """
     event = request.json_body
-    jwt_token = request.headers["authorization"][6:]
-    try:
-        payload = jwt_interface.decode(jwt_token)
-    except InvalidTokenError or DecodeError:
-        return {'status': "Error authenticating."}
 
-    if bot_interface.is_user_editor(payload["id"]):
-        event["startTime"] = datetime.now(timezone.utc).isoformat()
-        event["endTime"] = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
-        event["metadata"] = json.dumps({"owner": payload["id"]})
-        calendar.create_event(event)
-        return {'status': "Created event."}
-
-    return {"status": "Unauthorised."}
+    event["startTime"] = datetime.now(timezone.utc).isoformat()
+    event["endTime"] = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+    event["metadata"] = json.dumps({"owner": payload["id"]})
+    calendar.create_event(event)
+    return {'status': "Created event."}
 
 
 @view_config(route_name="v1:calendar/event/delete", request_method="DELETE", context=Root)
@@ -59,12 +55,6 @@ def delete_event(request: Request):
     """
 
     event_id = request.matchdict["event"]
-    jwt_token = request.headers["Authorization"][6:]
-
-    try:
-        payload = jwt_interface.decode(jwt_token)
-    except InvalidTokenError or DecodeError:
-        return {'status': "Error authenticating."}
 
     event = get_event(event_id)
 
