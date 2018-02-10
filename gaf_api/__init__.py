@@ -1,12 +1,10 @@
 from pyramid.config import Configurator
 from pyramid.renderers import json_renderer_factory
-from pyramid.authorization import ACLAuthorizationPolicy
 # from gaf_api.auth.oauth import BearerAuthenticationPolicy, JwtHelper, groups
 from gaf_api.resources import Root
-from os import getenv
 import logging
 
-import gaf_api.database as db
+import gaf_api.services.db_interface as db
 
 LOGGER = logging.getLogger("gaf_api")
 

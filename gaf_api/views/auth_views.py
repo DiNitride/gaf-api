@@ -5,9 +5,9 @@ from pyramid.view import view_config
 from pyramid.request import Request
 from pyramid.response import Response
 
-from gaf_api.services import utils
+from gaf_api.tools import utils
 from gaf_api.auth.oauth import JwtHelper
-import gaf_api.database as db
+import gaf_api.services.db_interface as db
 
 
 oauth = utils.load_config("oauth.json")

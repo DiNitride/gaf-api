@@ -8,17 +8,12 @@ from jwt.exceptions import InvalidTokenError, DecodeError
 from gaf_api.services import calendar
 from gaf_api.resources import Root
 from gaf_api.auth.oauth import JwtHelper
-from gaf_api.auth.bot_interface import BotInterface
-from gaf_api.services.utils import load_config
-
-import gaf_api.database as db
-
+from gaf_api.tools.utils import load_config
 
 jwt_config = load_config("jwt_config.json")
 jwt_interface = JwtHelper(key=jwt_config["secret"])
 
-bot_config = load_config("bot_config.json")
-bot_interface = BotInterface(token=bot_config["token"])
+
 
 
 @view_config(route_name="v1:live", request_method="GET", context=Root)
@@ -103,29 +98,3 @@ def delete_event(request: Request):
 #     calendar.update_event(event_id, **request.json_body)
 #
 #     return {'status': "Updated event."}
-
-# @view_config(route_name="v1:acronyms", request_method="GET", context=Root)
-# def get_acronyms(request: Request):
-#     db.cursor.execute("SELECT acronym FROM public.acronyms")
-#     acronyms = db.cursor.fetchall()
-#     return acronyms
-#
-#
-# @view_config(route_name="v1:acronyms/new", request_method="POST", context=Root)
-# def add_acronym(request: Request):
-#     acronym = request.json_body["acronym"]
-#     acronym_test = acronym.split()
-#     if not len(acronym_test) > 3:
-#         if acronym_test[0][0].lower() == "g":
-#             if acronym_test[1][0].lower() == "a":
-#                 if acronym_test[2][0].lower() == "f":
-#                     db.cursor.execute("SELECT acronym FROM public.acronyms")
-#                     acc = db.cursor.fetchall()
-#                     for i in acc:
-#                         if i[0].lower() == acronym.lower():
-#                             return {"status": "Acronym already exists"}
-#                     db.cursor.execute("INSERT INTO public.acronyms (acronym) VALUES (%s)", (acronym, ))
-#                     db.conn.commit()
-#                     return {"status": "Added acronym"}
-#     return {"status": "Invalid acronym"}
-

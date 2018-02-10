@@ -6,4 +6,3 @@ class Root(object):
         (Allow, Everyone, "view"),
         (Allow, "role:262334316611239937", ("add", "edit"))
     ]
-
