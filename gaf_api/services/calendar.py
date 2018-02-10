@@ -4,7 +4,7 @@ from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
 from apiclient import discovery
 
-from gaf_api.tools import utils
+from ..tools import utils
 
 creds = ServiceAccountCredentials.from_json_keyfile_dict(utils.load_config("google_keys.json"),
                                                          scopes=['https://www.googleapis.com/auth/calendar'])

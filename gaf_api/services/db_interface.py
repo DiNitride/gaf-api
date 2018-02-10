@@ -1,7 +1,7 @@
 import psycopg2
 import pprint
 
-from gaf_api.tools import utils
+from ..tools import utils
 
 db_config = utils.load_config("db.json")
 
