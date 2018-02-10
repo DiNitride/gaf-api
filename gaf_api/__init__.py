@@ -6,7 +6,7 @@ from gaf_api.resources import Root
 from os import getenv
 import logging
 
-import gaf_api.services.db_interface as db
+from .services import db_interface as db
 
 LOGGER = logging.getLogger("gaf_api")
 
