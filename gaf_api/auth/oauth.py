@@ -31,7 +31,7 @@ class BearerAuthenticationPolicy(CallbackAuthenticationPolicy):
         """
         Returns the userid stored in a request's token, or None if the token is missing or invalid.
         """
-        token = request.headers['authorization']
+        token = request.headers.get('authorization', None)
 
         if token is None or token == "":
             return None
