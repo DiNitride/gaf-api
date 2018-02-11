@@ -34,11 +34,14 @@ def main(global_config, **settings):
     # config.add_route("v1:acronyms/new", "/api/v1/acronyms/new")
     config.scan(".views.api_views")
     config.scan(".views.calendar_views")
+    config.scan(".views.acronym_views")
 
     # OAuth
     # config.add_route('oauth:authenticate', '/oauth2/authenticate')
     # config.add_route('oauth:authorize', '/oauth2/authorize')
     # config.add_route("oauth:@me", "/oauth2/@me")
     # config.scan(".auth_views")
+    
+    
 
     return config.make_wsgi_app()
