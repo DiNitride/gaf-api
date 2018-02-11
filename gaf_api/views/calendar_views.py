@@ -5,7 +5,7 @@ from pyramid.view import view_config
 from pyramid.request import Request
 
 from ..services import calendar
-from ..resources import APIRoot, Event, Events
+from ..resources import Event, Events
 
 
 # Getting Events

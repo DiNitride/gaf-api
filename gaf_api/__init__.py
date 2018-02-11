@@ -18,6 +18,7 @@ def get_root(request):
         }
     }
 
+
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application. """
 
@@ -35,6 +36,7 @@ def main(global_config, **settings):
     config.scan(".views.api_views")
     config.scan(".views.calendar_views")
     config.scan(".views.acronym_views")
+    config.scan(".views.auth_views")
 
     # OAuth
     # config.add_route('oauth:authenticate', '/oauth2/authenticate')

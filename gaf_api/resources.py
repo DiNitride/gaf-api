@@ -1,12 +1,14 @@
 from pyramid.security import Allow, Everyone
 from gaf_api.services.calendar import get_event
 
+
 class Param:
     def __init__(self, cls):
         self.cls = cls
 
     def __getitem__(self, item):
         return self.cls(item)
+
 
 class APIRoot(object):
     def __init__(self, request):
@@ -15,7 +17,10 @@ class APIRoot(object):
             "calendar": {
                 "event": Param(Event),
                 "events": Events()
-            }
+            },
+            "acronym": Param(Acronym),
+            "acronyms": Acronyms(),
+            "oauth2": Oauth2()
         }
 
     def __acl__(self):
@@ -27,8 +32,14 @@ class APIRoot(object):
     def __getitem__(self, item):
         return self.tree[item]
 
+
+class Oauth2(object):
+    pass
+
+
 class Events(object):
     pass
+
 
 class Event(object):
     def __init__(self, event_id):
@@ -43,3 +54,12 @@ class Event(object):
             (Allow, Everyone, "view"),
             (Allow, self.owner_id, "edit")
         ]
+
+
+class Acronyms(object):
+    pass
+
+
+class Acronym(object):
+    def __init__(self, acronym_id):
+        self.acronym_id = acronym_id

@@ -5,9 +5,10 @@ from pyramid.view import view_config
 from pyramid.request import Request
 from pyramid.response import Response
 
-from gaf_api.tools import utils
-from gaf_api.auth.oauth import JwtHelper
-import gaf_api.services.db_interface as db
+from ..resources import Oauth2
+from ..tools import utils
+from ..auth.oauth import JwtHelper
+from ..services import db_interface as db
 
 
 oauth = utils.load_config("oauth.json")
@@ -16,7 +17,7 @@ jwt_config = utils.load_config("jwt_config.json")
 jwt_interface = JwtHelper(key=jwt_config["secret"])
 
 
-@view_config(route_name="oauth:authenticate", request_method="GET")
+@view_config(context=Oauth2, name="authenticate", request_method="GET")
 def oauth_start(request: Request):
     """
     Redirects to the Discord OAuth2 login screen
@@ -28,13 +29,14 @@ def oauth_start(request: Request):
     return Response(status=307, headers={"Location": url})
 
 
-@view_config(route_name="oauth:authorize", request_method="GET")
+@view_config(context=Oauth2, name="authorize", request_method="GET")
 def oauth_authorize(request: Request):
     """
     Get's auth token from Discord using oauth code
     """
     code = request.params["code"]
-    redirect_url = request.route_url("oauth:authorize")
+    # redirect_url = request.route_url("oauth2:authorize")
+    redirect_url = "http://localhost:6543/api/v1/oauth2/authorize"
 
     data = utils.combine(
         code=code,
@@ -59,10 +61,10 @@ def oauth_authorize(request: Request):
 
     return Response(status=302, headers={"Location": f"http://www.neverendinggaf.com?token={jwt_token}"})
 
-
-@view_config(route_name="oauth:@me", request_method="GET")
-def get_me(request: Request):
-    """
-    Returns metadata on the logged in user
-    """
-    pass
+# Do we need this?
+# @view_config(route_name="oauth:@me", request_method="GET")
+# def get_me(request: Request):
+#     """
+#     Returns metadata on the logged in user
+#     """
+#     pass
