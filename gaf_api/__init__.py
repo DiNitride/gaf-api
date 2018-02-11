@@ -25,19 +25,27 @@ def main(global_config, **settings):
     # config.set_authorization_policy(ACLAuthorizationPolicy())
 
     # API v1
-    config.add_route('v1:calendar/events', '/api/v1/calendar/events')
-    config.add_route('v1:calendar/event', '/api/v1/calendar/event/{event}')
-    config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/delete/{event}")
-    config.add_route('v1:calendar/event/new', '/api/v1/calendar/event/new/')
-    config.add_route("v1:live", "/api/v1/live")
-    config.add_route("v1:acronyms", "/api/v1/acronyms")
-    config.add_route("v1:acronyms/new", "/api/v1/acronyms/new")
-    config.scan(".api_v1")
+    # config.add_route('v1:calendar/events', '/api/v1/calendar/events')
+    # config.add_route('v1:calendar/event', '/api/v1/calendar/event/{event}')
+    # config.add_route("v1:calendar/event/delete", "/api/v1/calendar/event/delete/{event}")
+    # config.add_route('v1:calendar/event/new', '/api/v1/calendar/event/new/')
+    # config.add_route("v1:live", "/api/v1/live")
+    # config.add_route("v1:acronyms", "/api/v1/acronyms")
+    # config.add_route("v1:acronyms/new", "/api/v1/acronyms/new")
+    # config.scan(".api_v1")
 
     # OAuth
-    config.add_route('oauth:authenticate', '/oauth2/authenticate')
-    config.add_route('oauth:authorize', '/oauth2/authorize')
-    config.add_route("oauth:@me", "/oauth2/@me")
-    config.scan(".auth_views")
+    # config.add_route('oauth:authenticate', '/oauth2/authenticate')
+    # config.add_route('oauth:authorize', '/oauth2/authorize')
+    # config.add_route("oauth:@me", "/oauth2/@me")
+    # config.scan(".auth_views")
+
+    # Calendar
+
+    # Acronyms
+    config.add_route("v3:acronyms", "/api/acronyms")
+    config.add_route("v3:acronym", "/api/acronym/{id}")
+    config.add_route("v3:acronyms/new", "/api/acronyms/new")
+    config.scan(".views.acronym_views")
 
     return config.make_wsgi_app()
