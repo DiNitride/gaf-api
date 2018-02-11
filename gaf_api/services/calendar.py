@@ -3,6 +3,7 @@ from httplib2 import Http
 
 from oauth2client.service_account import ServiceAccountCredentials
 from apiclient import discovery
+import json
 
 from ..tools import utils
 
@@ -75,7 +76,7 @@ def google_to_api(g: dict):
         "name": g.get("summary"),
         "id": g.get("id"),
         "channel": g.get("location"),
-        "metadata": g.get("description"),
+        "metadata": json.loads(g.get("description")),
         "startTime": g.get("start").get("dateTime"),
         "endTime": g.get("end").get("dateTime")
     }
@@ -90,7 +91,7 @@ def api_to_google(items: dict):
         "summary": items.get("name"),
         "id": items.get("id"),
         "location": items.get("channel"),
-        "description": items.get("metadata"),
+        "description": json.dumps(items.get("metadata")),
         "start": {"dateTime": items.get("startTime")},
         "end": {"dateTime": items.get("endTime")}
     }

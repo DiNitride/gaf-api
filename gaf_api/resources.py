@@ -1,8 +1,45 @@
 from pyramid.security import Allow, Everyone
+from gaf_api.services.calendar import get_event
 
+class Param:
+    def __init__(self, cls):
+        self.cls = cls
 
-class Root(object):
-    __acl__ = [
-        (Allow, Everyone, "view"),
-        (Allow, "role:262334316611239937", ("add", "edit"))
-    ]
+    def __getitem__(self, item):
+        return self.cls(item)
+
+class APIRoot(object):
+    def __init__(self, request):
+        self.request = request
+        self.tree = {
+            "calendar": {
+                "event": Param(Event),
+                "events": Events()
+            }
+        }
+
+    def __acl__(self):
+        return [
+            (Allow, Everyone, "view"),
+            (Allow, "role:262334316611239937", "add")
+        ]
+
+    def __getitem__(self, item):
+        return self.tree[item]
+
+class Events(object):
+    pass
+
+class Event(object):
+    def __init__(self, event_id):
+        self.event_id = event_id
+        self.ev_data = get_event(event_id)
+
+        print(self.ev_data)
+        self.owner_id = self.ev_data["metadata"]["owner"]
+
+    def __acl__(self):
+        return [
+            (Allow, Everyone, "view"),
+            (Allow, self.owner_id, "edit")
+        ]
