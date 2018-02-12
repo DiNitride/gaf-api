@@ -22,7 +22,7 @@ def oauth_start(request: Request):
     """
     Redirects to the Discord OAuth2 login screen
     """
-    redirect_url = oauth["redirect_url"]
+    redirect_url = request.host_url + "/api/v1/oauth2/authorize"
     query = urlparse.urlencode(query=utils.combine(redirect_uri=redirect_url, **oauth["params"]))
     url = urlparse.urljoin(oauth["auth_url"], "?" + query)
 
@@ -35,8 +35,7 @@ def oauth_authorize(request: Request):
     Get's auth token from Discord using oauth code
     """
     code = request.params["code"]
-    # redirect_url = request.route_url("oauth2:authorize")
-    redirect_url = "http://localhost:6543/api/v1/oauth2/authorize"
+    redirect_url = request.host_url + request.path
 
     data = utils.combine(
         code=code,
@@ -47,8 +46,10 @@ def oauth_authorize(request: Request):
     r = requests.post(oauth["token_url"], data=data)
     resp = r.json()
 
+    print(resp)
+
     if resp.get("error", False):
-        return Response(resp, status=400)
+        return Response(resp.get("error"), status=400, content_type="text/plain")
 
     access_token = resp.get('token_type') + " " + resp.get('access_token')
     refresh_token = resp.get('refresh_token')
@@ -56,10 +57,11 @@ def oauth_authorize(request: Request):
     r = requests.get("https://discordapp.com/api/v7/users/@me", headers={"Authorization": access_token})
     r = r.json()
 
-    jwt_token = jwt_interface.encode(id=r["id"])
+    jwt_token = jwt_interface.encode(user_id=r["id"]).decode("utf-8")
     db.add_user(r["id"], access_token, refresh_token)
 
-    return Response(status=302, headers={"Location": f"http://www.neverendinggaf.com?token={jwt_token}"})
+    return Response(status=302, headers={"Location": f"http://www.neverendinggaf.com?token={jwt_token}"},
+                    content_type="application/none")
 
 # Do we need this?
 # @view_config(route_name="oauth:@me", request_method="GET")

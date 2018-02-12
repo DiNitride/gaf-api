@@ -49,10 +49,10 @@ def create_event(event: dict):
     Takes a dictionary in internal event format and creates it on the calendar.
     """
     event = api_to_google(event)
-
     del event["id"]  # Deletes any ID passed so Google generates us a unique ID
 
-    service.events().insert(calendarId=calendar_id, body=event).execute()
+    res = service.events().insert(calendarId=calendar_id, body=event).execute()
+    return res["id"]
 
 
 # def update_event(event_id: str, **kwargs):

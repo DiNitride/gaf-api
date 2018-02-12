@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
-import json
 
+from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.request import Request
 
@@ -28,7 +28,7 @@ def get_event(request: Request):
 
 # Managing Events
 
-@view_config(context=Events, name="new", request_method="POST")
+@view_config(context=Events, name="new", request_method="POST", permission="add")
 def new_event(request: Request):
     """
     Creates a new event
@@ -36,13 +36,23 @@ def new_event(request: Request):
     event = {}
     payload = request.json_body
 
+    if request.unauthenticated_userid is None:
+        return Response("Unauthorized!", status=403)
+
     event["name"] = payload["name"]
     event["channel"] = payload["channel"]
-    event["startTime"] = datetime.now(timezone.utc).isoformat()
-    event["endTime"] = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
-    event["metadata"] = {"owner": payload["id"]}
-    calendar.create_event(event)
-    return {'status': "Created event."}
+    event["metadata"] = {"owner": request.unauthenticated_userid}
+
+    start = datetime.fromtimestamp(payload["start"], tz=timezone.utc)
+    event["startTime"] = start.isoformat()
+
+    if payload.get("end", False):
+        event["endTime"] = datetime.fromtimestamp(payload["end"], tz=timezone.utc)
+    else:
+        event["endTime"] = (start + timedelta(hours=1)).isoformat()
+
+    ev_id = calendar.create_event(event)
+    return {'status': "Created event.", "event_id": ev_id}
 
 
 @view_config(context=Event, name="delete", request_method="DELETE", permission="edit")
