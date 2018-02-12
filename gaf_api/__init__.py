@@ -6,8 +6,6 @@ from gaf_api.resources import APIRoot
 from gaf_api.tools import utils
 import logging
 
-# from .services import db_interface as db
-
 LOGGER = logging.getLogger("gaf_api")
 jwt_cfg = utils.load_config("jwt_config.json")
 
@@ -33,7 +31,7 @@ def main(global_config, **settings):
     # API v1
     config.scan(".views.api_views")
     config.scan(".views.calendar_views")
-    # config.scan(".views.acronym_views")
+    config.scan(".views.acronym_views")
     config.scan(".views.auth_views")
 
     return config.make_wsgi_app()

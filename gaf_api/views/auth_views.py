@@ -8,7 +8,7 @@ from pyramid.response import Response
 from ..resources import Oauth2
 from ..tools import utils
 from ..auth.oauth import JwtHelper
-# from ..services import db_interface as db
+from ..services import db_interface as db
 
 
 oauth = utils.load_config("oauth.json")
@@ -58,7 +58,7 @@ def oauth_authorize(request: Request):
     r = r.json()
 
     jwt_token = jwt_interface.encode(user_id=r["id"]).decode("utf-8")
-    # db.add_user(r["id"], access_token, refresh_token)
+    db.add_user(r["id"], access_token, refresh_token)
 
     return Response(status=302, headers={"Location": f"http://www.neverendinggaf.com?token={jwt_token}"},
                     content_type="application/none")
