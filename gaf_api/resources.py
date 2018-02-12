@@ -25,8 +25,7 @@ class APIRoot(object):
 
     def __acl__(self):
         return [
-            (Allow, Everyone, "view"),
-            (Allow, "role:262334316611239937", "add")
+            (Allow, Everyone, "view")
         ]
 
     def __getitem__(self, item):
@@ -38,20 +37,22 @@ class Oauth2(object):
 
 
 class Events(object):
-    pass
+    __acl__ = [
+        (Allow, Everyone, "view"),
+        (Allow, "role:262334316611239937", "add")
+    ]
 
 
 class Event(object):
     def __init__(self, event_id):
         self.event_id = event_id
         self.ev_data = get_event(event_id)
-
-        print(self.ev_data)
         self.owner_id = self.ev_data["metadata"]["owner"]
 
     def __acl__(self):
         return [
             (Allow, Everyone, "view"),
+            (Allow, "role:262334316611239937", "add"),
             (Allow, self.owner_id, "edit")
         ]
 

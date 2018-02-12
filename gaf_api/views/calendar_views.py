@@ -28,7 +28,7 @@ def get_event(request: Request):
 
 # Managing Events
 
-@view_config(context=Events, name="new", request_method="POST")
+@view_config(context=Events, name="new", request_method="POST", permission="add")
 def new_event(request: Request):
     """
     Creates a new event

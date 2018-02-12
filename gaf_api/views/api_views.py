@@ -9,4 +9,4 @@ def live_check(request: Request):
     """
     Checks if things are working fine
     """
-    return {"API Live": True}
+    return {"API Live": True, "principals": request.effective_principals}

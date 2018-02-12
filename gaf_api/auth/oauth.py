@@ -2,8 +2,10 @@ import requests
 
 from pyramid.authentication import CallbackAuthenticationPolicy
 from pyramid.request import Request
+from gaf_api.tools import utils
 import jwt
 
+cfg = utils.load_config("bot_config.json")
 
 class JwtHelper:
 
@@ -39,7 +41,7 @@ class BearerAuthenticationPolicy(CallbackAuthenticationPolicy):
         try:
             store = self.jwt_helper.decode(token)
             return store.get("user_id")
-        except jwt.JWTError:
+        except jwt.InvalidTokenError:
             return None
 
     def remember(self, request: Request, userid, **kw):
@@ -86,13 +88,13 @@ class DiscordBearerClient:
 def groups(client_userid, request: Request):
     """
     Returns a user's groups for the authentication policy callback
+    
+    Calls Discord API; consider caching in future?
     """
-    guild_id = 0  # This should be gaf's guild ID: configurable?
+    guild_id = cfg["server_id"]
 
-    # Here we use the bot's token to get hold of the user's roles
-    # Bot's token isn't in yet - replace the string with a variable or whatever
     r = requests.get(f"https://discordapp.com/api/v7/guilds/{guild_id}/members/{client_userid}",
-                     headers={"Authorization": "GAF_TOKEN_IN_CONFIG"})
+                     headers={"Authorization": cfg["bot_token"]})
 
     if r.status_code == 200:
         member = r.json()
