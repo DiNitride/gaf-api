@@ -39,7 +39,6 @@ class Oauth2(object):
 class Events(object):
     __acl__ = [
         (Allow, Everyone, "view"),
-        (Allow, "role:107591876533592064", "add"),  # TODO: remove this debug role
         (Allow, "role:262334316611239937", "add")
     ]
 
@@ -48,7 +47,7 @@ class Event(object):
     def __init__(self, event_id):
         self.event_id = event_id
         self.ev_data = get_event(event_id)
-        self.owner_id = self.ev_data["metadata"]["owner"]
+        self.owner_id = self.ev_data.get("metadata", {}).get("owner", None)
 
     def __acl__(self):
         return [
