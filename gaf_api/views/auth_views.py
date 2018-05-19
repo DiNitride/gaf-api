@@ -32,6 +32,8 @@ def oauth_start(request: Request):
 def oauth_authorize(request: Request):
     """
     Get's auth token from Discord using oauth code
+    :param request:
+    :return:
     """
     code = request.params["code"]
     redirect_url = request.host_url + request.path
