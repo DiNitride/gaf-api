@@ -16,7 +16,6 @@ oauth = utils.load_config("oauth.json")
 jwt_config = utils.load_config("jwt_config.json")
 jwt_interface = JwtHelper(key=jwt_config["secret"])
 
-
 @view_config(context=Oauth2, name="authenticate", request_method="GET")
 def oauth_start(request: Request):
     """
@@ -33,6 +32,8 @@ def oauth_start(request: Request):
 def oauth_authorize(request: Request):
     """
     Get's auth token from Discord using oauth code
+    :param request:
+    :return:
     """
     code = request.params["code"]
     redirect_url = request.host_url + request.path
@@ -60,6 +61,8 @@ def oauth_authorize(request: Request):
     jwt_token = jwt_interface.encode(user_id=r["id"]).decode("utf-8")
     db.add_user(r["id"], access_token, refresh_token)
 
+    # TODO: Make this redirect better for when you're testing locally
+    # Should redirect back to the site they clicked login from eventually?
     return Response(status=302, headers={"Location": f"http://www.neverendinggaf.com?token={jwt_token}"},
                     content_type="application/none")
 

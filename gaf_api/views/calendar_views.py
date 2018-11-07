@@ -23,6 +23,10 @@ def get_event(request: Request):
     """
     Get's an event from an event ID
     """
+    print("########################")
+    print(request.context.event_id)
+    print(request.context.ev_data)
+    print("##########################")
     return request.context.ev_data
 
 

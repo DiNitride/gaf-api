@@ -8,5 +8,7 @@ from ..resources import APIRoot
 def live_check(request: Request):
     """
     Checks if things are working fine
+    :param request: Some stuff idk
+    :return: dfjhioesbfgyuhrbsj
     """
     return {"API Live": True, "principals": request.effective_principals}

@@ -39,7 +39,6 @@ class Oauth2(object):
 class Events(object):
     __acl__ = [
         (Allow, Everyone, "view"),
-        (Allow, "role:107591876533592064", "add"),  # TODO: remove this debug role
         (Allow, "role:262334316611239937", "add")
     ]
 

@@ -33,4 +33,5 @@ def add_acronym(request: Request):
     if valid_acronym(acronym):
         if db.add_acronym(acronym):
             return {"status": "Added acronym"}
-        return {"status": "Error adding acronym (Either invalid or already in database)"}
+        return {"status": "Error adding acronym (Already in database)"}
+    return {"status": "Error adding acronym (Invalid Acronym)"}
