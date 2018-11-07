@@ -10,6 +10,7 @@ requires = [
     'pyramid',
     'waitress',
     'google-api-python-client',
+    'oauth2client',
     'requests',
     "PyJWT",
     "pyramid-debugtoolbar",

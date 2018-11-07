@@ -48,7 +48,7 @@ class Event(object):
     def __init__(self, event_id):
         self.event_id = event_id
         self.ev_data = get_event(event_id)
-        self.owner_id = self.ev_data["metadata"]["owner"]
+        self.owner_id = self.ev_data.get("metadata", {}).get("owner", None)
 
     def __acl__(self):
         return [
